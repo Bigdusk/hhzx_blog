@@ -1,0 +1,11 @@
+[package]
+name = "hhzx_log"
+version = "0.1.0"
+edition = "2021"
+authors = ["hhzx"]
+description = "axum框架的一款简单的日志中间件"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+axum = "0.7.5"

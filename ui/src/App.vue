@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import axios from "axios";
+import {onMounted} from "vue";
+onMounted(() => {
+  axios.get("https://127.0.0.1:8888/").then(r => {
+    console.log(r)
+  })
+})
 </script>
 
 <template>
