@@ -6,6 +6,9 @@
       <sourceFolder url="file://$MODULE_DIR$/api/entity/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/api/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/api_lib/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/api/src/bin/cors/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/api/src/bin/hhzx_cors/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/api/src/bin/hhzx_log/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/api/target" />
       <excludeFolder url="file://$MODULE_DIR$/api_lib/target" />
     </content>

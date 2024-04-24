@@ -5,6 +5,8 @@ use api::utils::env_var;
 
 #[tokio::main]
 async fn main() {
+    //日志
+    tracing_subscriber::fmt::init();
     //检查是否有配置文件
     dotenv::dotenv().expect("读取配置文件失败(请在根目录创建.env)");
     let port: u16 = env_var("PORT");
