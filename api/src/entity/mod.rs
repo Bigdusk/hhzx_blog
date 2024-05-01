@@ -3,6 +3,12 @@
 pub mod prelude;
 
 pub mod article;
+pub mod article_tags;
 pub mod category;
 pub mod comment;
+pub mod permissions;
+pub mod role_permissions;
+pub mod roles;
+pub mod tags;
 pub mod user;
+pub mod user_roles;

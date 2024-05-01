@@ -4,17 +4,14 @@ import {darkTheme, type DrawerPlacement,} from "naive-ui";
 import {MenuOutline, MoonOutline, SunnyOutline} from '@vicons/ionicons5'
 import {onMounted, ref} from "vue";
 import router from "@/router";
+import {to_path} from "@/utils";
 
 onMounted(() => {
   set_page_show()
 })
 function set_page_show() {
   let path = window.location.pathname
-  if (path === "/admin") {
-    page_show.value = false
-  }else {
-    page_show.value = true
-  }
+  page_show.value = !path.includes('/admin');
 }
 const page_show = ref(true)
 
@@ -29,18 +26,20 @@ const activate = (place: DrawerPlacement) => {
 
 const active = activeRef
 const placement = placementRef
-function set_topic() {
-  is_topic_show.value = !is_topic_show.value
-  if (is_topic_show.value) {
-    counter.theme = null
-  }else {
-    counter.theme = darkTheme
-  }
+//搜索
+const search_value = ref("")
+function search() {
+  activeRef.value = false
+  counter.search_value_set(search_value.value)
+  counter.article_all()
+  to_path('/')
 }
-const is_topic_show = ref(true)
 </script>
 
 <template>
+
+  <div class="b-masks" :style="{width: counter.is_masks + '%'}"></div>
+
   <div v-show="page_show" class="box">
     <n-button class="menu-box" @click="activate('left')" text style="font-size: 34px">
       <n-icon>
@@ -56,8 +55,8 @@ const is_topic_show = ref(true)
         <div class="nav-box">
           <n-space>
             <n-input-group>
-              <n-input placeholder="关键字"/>
-              <n-button type="primary" ghost>
+              <n-input v-model:value="search_value" placeholder="关键字"/>
+              <n-button @click="search" type="primary" ghost>
                 搜索
               </n-button>
             </n-input-group>
@@ -66,10 +65,10 @@ const is_topic_show = ref(true)
             </n-button>
           </n-space>
         </div>
-        <n-button @click="set_topic" text style="font-size: 34px">
+        <n-button @click="counter.set_topic" text style="font-size: 34px">
           <n-icon>
-            <SunnyOutline v-show="is_topic_show"/>
-            <MoonOutline v-show="!is_topic_show"/>
+            <SunnyOutline v-show="!counter.is_topic_show"/>
+            <MoonOutline v-show="counter.is_topic_show"/>
           </n-icon>
         </n-button>
       </n-space>
@@ -88,14 +87,14 @@ const is_topic_show = ref(true)
           <n-divider dashed>
             <n-avatar
                 round
-                :size="48"
-                src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+                :size="68"
+                src="http://q1.qlogo.cn/g?b=qq&nk=2831828656&s=100"
             />
           </n-divider>
         </div>
         <n-input-group>
-          <n-input placeholder="关键字"/>
-          <n-button type="primary" ghost>
+          <n-input v-model:value="search_value" placeholder="关键字"/>
+          <n-button @click="search" type="primary" ghost>
             搜索
           </n-button>
         </n-input-group>
@@ -112,14 +111,6 @@ const is_topic_show = ref(true)
         <n-button v-for="i in 5" type="primary" dashed>
           分类
         </n-button>
-        <div>
-          Tags
-        </div>
-        <n-space>
-          <n-tag v-for="i in 10" type="success">
-            标签
-          </n-tag>
-        </n-space>
       </n-flex>
 
     </n-drawer-content>
@@ -165,5 +156,18 @@ const is_topic_show = ref(true)
     padding-right: 10px;
     background: transparent;
   }
+}
+
+.b-masks {
+  z-index: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-image: url("@/assets/img/h.png");
+  background-size: cover;
+  background-attachment:fixed;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: fixed;
+  transition: ease 2s;
 }
 </style>

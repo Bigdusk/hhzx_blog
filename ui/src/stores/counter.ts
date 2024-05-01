@@ -1,12 +1,92 @@
-import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
+import {ref} from 'vue'
+import {defineStore} from 'pinia'
 import type {GlobalTheme} from "naive-ui";
+import {darkTheme} from "naive-ui";
+import axios_util from "@/utils/axios_util";
+import {message} from "@/utils";
 
 export const useCounterStore = defineStore('counter', () => {
 
-  const theme = ref<GlobalTheme | null>()
+    const theme = ref<GlobalTheme | null>()
 
-  const nav_is_show = ref(true)
+    const is_topic_show = ref(true)
+    const is_masks = ref(100)
 
-  return { theme }
+    //主题切换
+    async function set_topic() {
+        is_topic_show.value = !is_topic_show.value
+        if (is_topic_show.value) {
+            theme.value = null
+            is_masks.value = 0
+        } else {
+            theme.value = darkTheme
+            is_masks.value = 100
+        }
+    }
+
+
+    //文章搜索
+    interface ArticleInfo {
+        category_name?: string
+        cover?: string
+        id?: number
+        likes?: number
+        nickname?: string
+        publish_time?: string
+        status?: number
+        title?: string
+        update_time?: string
+        views?: number
+    }
+
+    const page = ref(1)
+    const size = ref(5)
+    const search_value = ref<string | undefined>('')
+//设置搜索信息
+    function search_value_set(value: string) {
+        search_value.value = value
+    }
+//获取全部文章
+    function article_all() {
+        if (search_value.value === '') {
+            search_value.value = 'undefined'
+        }
+        axios_util.get<ArticleInfo[]>('/article/' + page.value + '/' + size.value + '/title/' + search_value.value).then(r => {
+            article_list.value = r.data
+        })
+    }
+
+    const article_list = ref<ArticleInfo[]>([])
+
+//所有文章下一页
+    async function LoadMoreArticles() {
+        if (search_value.value === '') {
+            search_value.value = 'undefined'
+        }
+        await axios_util.get<ArticleInfo[]>('/article/' + ++page.value + '/' + size.value + '/title/' + search_value.value)
+            .then(r => {
+                if (r.data.length > 0) {
+                    r.data.forEach(r => {
+                        article_list.value.push(r)
+                    })
+                } else {
+                    message.success('到了尽头...')
+                }
+
+            })
+    }
+
+    return {
+        theme,
+        is_masks,
+        set_topic,
+        is_topic_show,
+        page,
+        size,
+        search_value,
+        article_all,
+        article_list,
+        LoadMoreArticles,
+        search_value_set
+    }
 })

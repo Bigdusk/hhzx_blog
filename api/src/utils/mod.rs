@@ -8,3 +8,6 @@ pub fn env_var<T: FromStr>(key: &str) -> T where <T as FromStr>::Err: Debug{
         .parse::<T>()
         .expect(format!("配置文件字段解析失败:{key}").as_str())
 }
+
+pub mod result;
+pub mod jwt;

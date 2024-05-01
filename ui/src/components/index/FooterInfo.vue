@@ -10,6 +10,7 @@
 
 <style scoped>
 .f-box {
+  position: relative;
   width: 100%;
   min-height: 62px;
   display: flex;

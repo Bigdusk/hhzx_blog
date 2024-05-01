@@ -10,3 +10,11 @@ body {
 body::-webkit-scrollbar {
   display: none;
 }
+
+.md-editor .md-editor-toolbar-wrapper .md-editor-toolbar-left, .md-editor-toolbar-wrapper .md-editor-toolbar-right {
+  display: block;
+}
+
+.md-editor-dark {
+  --md-bk-color: rgb(24, 24, 28) !important;
+}

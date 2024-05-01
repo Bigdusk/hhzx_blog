@@ -1,11 +1,28 @@
 <script setup lang="ts">
 import {
   PersonOutline,
-  PricetagOutline,
+  GridOutline,
   CalendarOutline,
   EyeOutline
 } from '@vicons/ionicons5'
 import HeaderImg from "@/components/index/HeaderImg.vue";
+import {onMounted, ref} from "vue";
+import {to_path} from "@/utils";
+import {useCounterStore} from "@/stores/counter";
+import axios_util from "@/utils/axios_util";
+import type {Category} from "@/entity";
+const counter = useCounterStore()
+onMounted(() => {
+  counter.article_all()
+  category_all()
+})
+//查询分类
+const category_list = ref<Category[]>([])
+async function category_all() {
+  await axios_util.get<Category[]>('/category/select/all').then(r => {
+    category_list.value = r.data
+  })
+}
 </script>
 
 <template>
@@ -14,17 +31,30 @@ import HeaderImg from "@/components/index/HeaderImg.vue";
 
     <div class="a-box">
       <div class="a-list-box">
-        <n-card style="margin-bottom: 32px;padding: 2px;border-radius: .5rem;" v-for="i in 10" title="卡片" embedded hoverable>
+        <n-card style="margin-bottom: 32px;padding: 2px;border-radius: .5rem;"
+                v-for="r in counter.article_list"
+                :title="r.title"
+                :key="r.id"
+                @click="to_path('/article/' + r.id)"
+                embedded hoverable>
           <n-space>
-            <n-icon :component="PersonOutline" /> 1
-            <n-icon :component="PricetagOutline" /> 2
-            <n-icon :component="CalendarOutline" /> 3
-            <n-icon :component="EyeOutline" /> 4
+            <n-icon :component="PersonOutline"/>
+            {{ r.nickname }}
+            <n-icon :component="GridOutline"/>
+            {{ r.category_name }}
+            <n-icon :component="CalendarOutline"/>
+            {{ r.update_time }}
+            <n-icon :component="EyeOutline"/>
+            {{ r.views }}
           </n-space>
         </n-card>
         <n-card :bordered="false" size="small" hoverable>
           <n-flex justify="center">
-            <n-button quaternary type="primary">
+            <n-button
+                @click="counter.LoadMoreArticles"
+                quaternary
+                type="primary"
+            >
               加载更多
             </n-button>
           </n-flex>
@@ -38,8 +68,8 @@ import HeaderImg from "@/components/index/HeaderImg.vue";
               <n-divider dashed>
                 <n-avatar
                     round
-                    :size="48"
-                    src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+                    :size="68"
+                    src="http://q1.qlogo.cn/g?b=qq&nk=2831828656&s=100"
                 />
               </n-divider>
             </div>
@@ -48,8 +78,13 @@ import HeaderImg from "@/components/index/HeaderImg.vue";
             <div>
               Categories
             </div>
-            <n-button v-for="i in 5" type="primary" dashed>
-              分类
+            <n-button
+                v-for="r in category_list"
+                @click="to_path('/category/'+ r.category_name + '/' + r.id)"
+                type="primary"
+                dashed
+            >
+              {{ r.category_name }}
             </n-button>
             <div>
               Tags
@@ -71,14 +106,17 @@ import HeaderImg from "@/components/index/HeaderImg.vue";
 .a-list-box {
   width: 676px;
 }
+
 .u-info-box {
   width: 298px;
   transition: ease 1s;
 }
+
 .u-info-box-card {
   position: fixed;
-  width: 298px;
+  width: 278px;
 }
+
 .a-box {
   width: 1024px;
   margin: 0 auto;
@@ -86,22 +124,27 @@ import HeaderImg from "@/components/index/HeaderImg.vue";
   padding: 0 16px 0 16px;
   justify-content: space-between;
 }
+
 .m-box {
   width: 100%;
   min-height: 100vh;
   padding: 80px 0 100px 0;
   transition: ease 1s;
 }
-@media screen and (max-width: 1024px){
+
+@media screen and (max-width: 1024px) {
   .u-info-box {
     display: none;
   }
+
   .a-list-box {
     margin: 0 auto;
   }
+
   .a-box {
     width: 100%;
   }
+
   .m-box {
     padding-top: 0;
   }
