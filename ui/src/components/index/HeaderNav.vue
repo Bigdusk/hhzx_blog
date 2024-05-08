@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useCounterStore} from "@/stores/counter";
-import {darkTheme, type DrawerPlacement,} from "naive-ui";
+import {type DrawerPlacement,} from "naive-ui";
 import {MenuOutline, MoonOutline, SunnyOutline} from '@vicons/ionicons5'
 import {onMounted, ref} from "vue";
 import router from "@/router";
@@ -151,9 +151,9 @@ async function category_all() {
   background-color: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
-  border: 0px solid rgba(255, 255, 255, 0.18);
-  border-radius: 0px;
-  -webkit-border-radius: 0px;
+  border: 0 solid rgba(255, 255, 255, 0.18);
+  border-radius: 0;
+  -webkit-border-radius: 0;
   color: rgba(255, 255, 255, 0.15);
   min-width: 375px;
   height: 64px;

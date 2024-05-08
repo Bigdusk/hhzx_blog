@@ -1,4 +1,3 @@
-use std::error::Error;
 use axum::extract::{Path, State};
 use axum::Json;
 use http::HeaderMap;

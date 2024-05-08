@@ -134,8 +134,8 @@ function user_out() {
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   border-right: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: rgba(14, 14, 14, 0.19) 0px 6px 15px 0px;
-  -webkit-box-shadow: rgba(14, 14, 14, 0.19) 0px 6px 15px 0px;
+  box-shadow: rgba(14, 14, 14, 0.19) 0 6px 15px 0;
+  -webkit-box-shadow: rgba(14, 14, 14, 0.19) 0 6px 15px 0;
   border-radius: 0 40px 40px 0;
   -webkit-border-radius: 0 40px 40px 0;
 }
@@ -157,9 +157,9 @@ function user_out() {
   background-color: rgba(89, 89, 89, 0.05);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 0px solid rgba(255, 255, 255, 0.18);
-  box-shadow: rgba(14, 14, 14, 0.19) 0px 6px 15px 0px;
-  -webkit-box-shadow: rgba(14, 14, 14, 0.19) 0px 6px 15px 0px;
+  border: 0 solid rgba(255, 255, 255, 0.18);
+  box-shadow: rgba(14, 14, 14, 0.19) 0 6px 15px 0;
+  -webkit-box-shadow: rgba(14, 14, 14, 0.19) 0 6px 15px 0;
   border-radius: 12px;
   -webkit-border-radius: 12px;
 }

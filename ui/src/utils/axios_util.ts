@@ -1,5 +1,4 @@
 import axios from "axios";
-import {createDiscreteApi} from "naive-ui";
 import {message, to_path} from "@/utils/index";
 const axios_util = axios.create({
     baseURL: "https://127.0.0.1:8888",

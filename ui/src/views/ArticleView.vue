@@ -37,8 +37,6 @@ import 'md-editor-v3/lib/preview.css';
 import {useCounterStore} from "@/stores/counter";
 import {useRoute} from "vue-router";
 import {message} from "@/utils";
-import axios from "axios";
-import QQInfo from "@/components/diy/QQname.vue";
 import QQname from "@/components/diy/QQname.vue";
 
 const id = 'preview-only';

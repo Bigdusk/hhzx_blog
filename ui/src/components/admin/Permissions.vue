@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import axios_util from "@/utils/axios_util";
-import type {Category, Permissions, RolePermissions, Roles} from "@/entity";
+import type {Permissions, RolePermissions, Roles} from "@/entity";
 import {message} from "@/utils";
-import type {SelectOption} from "naive-ui";
+
 onMounted(() => {
   roles_all()
 })

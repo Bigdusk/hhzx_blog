@@ -81,7 +81,6 @@ const pagination = {
 import {createDiscreteApi} from "naive-ui";
 import type {Article} from "@/entity";
 import axios_util from "@/utils/axios_util";
-import router from "@/router";
 import {to_path} from "@/utils";
 
 const {message} = createDiscreteApi(['message'])
