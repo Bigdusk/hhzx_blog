@@ -27,7 +27,7 @@ CREATE TABLE `article` (
   `article_tags` varchar(255) DEFAULT NULL COMMENT '所有标签',
   `title` varchar(255) NOT NULL COMMENT '文章标题，不能为空',
   `cover` varchar(255) DEFAULT NULL COMMENT '封面',
-  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '文章内容，纯文本格式，不能为空',
+  `router` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '导向路由',
   `markdown` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '文章内容，Markdown格式，不能为空',
   `html` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '文章内容，HTML格式，不能为空',
   `publish_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '发布时间，默认当前时间',
@@ -36,22 +36,12 @@ CREATE TABLE `article` (
   `views` bigint DEFAULT '0' COMMENT '浏览量，默认为0',
   `likes` bigint DEFAULT '0' COMMENT '点赞数，默认为0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `article` */
 
-insert  into `article`(`id`,`user_id`,`category_id`,`article_tags`,`title`,`cover`,`content`,`markdown`,`html`,`publish_time`,`update_time`,`status`,`views`,`likes`) values 
-(2,1,13,'','编辑器测试',NULL,NULL,'## ? md-editor-v3\n\nMarkdown 编辑器，vue3 版本，使用 jsx 模板 和 typescript 开发，支持切换主题、prettier 美化文本等。\n\n### ? 基本演示\n\n**加粗**，<u>下划线</u>，_斜体_，~~删除线~~，上标<sup>26</sup>，下标<sub>1</sub>，`inline code`，[超链接](https://github.com/imzbf)\n\n> 引用：《I Have a Dream》\n\n1. So even though we face the difficulties of today and tomorrow, I still have a dream.\n2. It is a dream deeply rooted in the American dream.\n3. I have a dream that one day this nation will rise up.\n\n- [ ] 周五\n- [ ] 周六\n- [x] 周天\n\n![图片](https://imzbf.github.io/md-editor-rt/imgs/mark_emoji.gif)\n\n## ? 代码演示\n\n```vue\n<template>\n  <MdEditor v-model=\"text\" />\n</template>\n\n<script setup>\nimport { ref } from \'vue\';\nimport { MdEditor } from \'md-editor-v3\';\nimport \'md-editor-v3/lib/style.css\';\n\nconst text = ref(\'Hello Editor!\');\n</script>\n```\n\n## ? 文本演示\n\n依照普朗克长度这项单位，目前可观测的宇宙的直径估计值（直径约 930 亿光年，即 8.8 × 10<sup>26</sup> 米）即为 5.4 × 10<sup>61</sup>倍普朗克长度。而可观测宇宙体积则为 8.4 × 10<sup>184</sup>立方普朗克长度（普朗克体积）。\n\n## ? 表格演示\n\n| 昵称 | 来自      |\n| ---- | --------- |\n| 之间 | 中国-重庆 |\n\n## ? 公式\n\n行内：$x+y^{2x}$\n\n$$\n\\sqrt[3]{x}\n$$\n\n## ? 图表\n\n```mermaid\nflowchart TD\n  Start --> Stop\n```\n\n## ? 提示\n\n!!! note 支持的类型\n\nnote、abstract、info、tip、success、question、warning、failure、danger、bug、example、quote、hint、caution、error、attention\n\n!!!\n\n## ☘️ 占个坑@！',NULL,'2024-04-29 23:23:52','2024-04-29 23:23:52',0,5,0),
-(4,1,13,'生活','文章1',NULL,NULL,'![](https://127.0.0.1:8888/file/download/MjA2CW2iZGB43CrN3T6SO-image.jpeg)\n',NULL,'2024-04-30 22:35:59','2024-04-30 22:35:59',0,6,0),
-(5,1,13,'代码','图片1',NULL,NULL,'![](https://127.0.0.1:8888/file/download/4DBAbKu8WSqN4tARnxPy6-image.png)\n',NULL,'2024-04-30 22:38:04','2024-04-30 22:38:04',0,3,0),
-(6,1,15,'','rust',NULL,NULL,'![](https://127.0.0.1:8888/file/download/TaL_cQRJiv3Haqr-Xmb1S-image.gif)\n',NULL,'2024-04-30 22:46:52','2024-04-30 22:46:52',0,0,0),
-(7,1,15,'','梵高的星空',NULL,NULL,'![](https://127.0.0.1:8888/file/download/ZDZuJ-hamO4jmZaBP6XuR-image.jpeg)\n',NULL,'2024-04-30 22:47:35','2024-04-30 22:47:35',0,5,0),
-(8,1,13,'','区域剪切',NULL,NULL,'![](https://127.0.0.1:8888/file/download/a_PFCDRG96st3JJHpHL1J-image.png)\n\n',NULL,'2024-04-30 22:50:29','2024-04-30 22:50:29',0,2,0),
-(9,1,13,'','1',NULL,NULL,'![](https://127.0.0.1:8888/file/download/3rx7HO0Rf7M83t89gwr6B-image.jpeg)\n',NULL,'2024-05-01 13:13:17','2024-05-01 13:13:17',0,1,0),
-(10,1,13,'','a1',NULL,NULL,'1',NULL,'2024-05-01 13:38:18','2024-05-01 13:38:18',0,3,0),
-(11,1,13,'','b1',NULL,NULL,'a1',NULL,'2024-05-01 13:38:37','2024-05-01 13:38:37',0,4,0),
-(13,1,13,'标签1,标签2,标签3','测100',NULL,NULL,'a',NULL,'2024-05-01 16:14:47','2024-05-01 16:27:29',0,11,0),
-(14,1,13,'涩涩','图片',NULL,NULL,'# 雪女紧闭\n![](https://127.0.0.1:8888/file/download/v-dXzLG3O0FEK3_ZlzEDo-image.jpeg)\n\n# 雪女张开\n![](https://127.0.0.1:8888/file/download/O596HNx1AFJg0oFZ7U7dR-image.jpeg)\n',NULL,'2024-05-02 00:17:05','2024-05-02 00:17:05',0,49,0);
+insert  into `article`(`id`,`user_id`,`category_id`,`article_tags`,`title`,`cover`,`router`,`markdown`,`html`,`publish_time`,`update_time`,`status`,`views`,`likes`) values 
+(28,0,14,'测试,生活,代码,rust,vue,axum','文本编辑器测试',NULL,NULL,'## ? md-editor-v3\n\nMarkdown Editor for Vue3, developed in jsx and typescript, support different themes、beautify content by prettier.\n\n### ? Base\n\n**bold**, <u>underline</u>, _italic_, ~~line-through~~, superscript<sup>26</sup>, subscript<sub>1</sub>, `inline code`, [link](https://github.com/imzbf)\n\n> quote: I Have a Dream\n\n1. So even though we face the difficulties of today and tomorrow, I still have a dream.\n2. It is a dream deeply rooted in the American dream.\n3. I have a dream that one day this nation will rise up.\n\n- [ ] Friday\n- [ ] Saturday\n- [x] Sunday\n\n![Picture](https://imzbf.github.io/md-editor-rt/imgs/mark_emoji.gif)\n\n## ? Code\n\n```vue\n<template>\n  <MdEditor v-model=\"text\" />\n</template>\n\n<script setup>\nimport { ref } from \'vue\';\nimport { MdEditor } from \'md-editor-v3\';\nimport \'md-editor-v3/lib/style.css\';\n\nconst text = ref(\'Hello Editor!\');\n</script>\n```\n\n## ? Text\n\nThe Old Man and the Sea served to reinvigorate Hemingway\'s literary reputation and prompted a reexamination of his entire body of work.\n\n## ? Table\n\n| nickname | from             |\n| -------- | ---------------- |\n| zhijian  | ChongQing, China |\n\n## ? Formula\n\nInline: $x+y^{2x}$\n\n$$\n\\sqrt[3]{x}\n$$\n\n## ? Diagram\n\n```mermaid\nflowchart TD\n  Start --> Stop\n```\n\n## ? Alert\n\n!!! note Supported Types\n\nnote、abstract、info、tip、success、question、warning、failure、danger、bug、example、quote、hint、caution、error、attention\n\n!!!\n\n## ☘️ em...\n',NULL,'2024-05-08 18:48:48','2024-05-08 18:48:48',0,2,0);
 
 /*Table structure for table `article_tags` */
 
@@ -101,15 +91,30 @@ CREATE TABLE `comment` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间，默认当前时间',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间，默认当前时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `comment` */
 
 insert  into `comment`(`id`,`comment_id`,`article_id`,`user_id`,`qq`,`web_url`,`content`,`create_time`,`update_time`) values 
-(1,NULL,14,NULL,'2831828656','http://blog.hhzx.top','留言','2024-05-02 00:25:45','2024-05-02 00:25:45'),
-(2,1,14,NULL,'2831828656','http://blog.hhzx.top','回复','2024-05-02 00:59:58','2024-05-02 00:59:58'),
-(3,1,14,NULL,'2402979195','1','回复','2024-05-02 01:01:40','2024-05-02 01:01:40'),
-(4,1,14,NULL,'652034297',NULL,'不错','2024-05-02 01:05:10','2024-05-02 01:05:10');
+(5,NULL,15,NULL,'2831828656','http://blog.hhzx.top','不错','2024-05-02 19:56:47','2024-05-02 19:56:47'),
+(6,5,15,NULL,'2831828656','http://blog.hhzx.top','666','2024-05-02 19:56:57','2024-05-02 19:56:57'),
+(7,NULL,26,NULL,'2831828656','/','你好','2024-05-05 09:21:47','2024-05-05 09:21:47'),
+(8,7,26,NULL,'3145323736','/','你好','2024-05-05 09:22:10','2024-05-05 09:22:10'),
+(9,NULL,26,NULL,'2831828656','/','测试','2024-05-06 22:58:04','2024-05-06 22:58:04'),
+(10,9,26,NULL,'2831828656','/','测试','2024-05-07 18:12:37','2024-05-07 18:12:37');
+
+/*Table structure for table `k_v` */
+
+DROP TABLE IF EXISTS `k_v`;
+
+CREATE TABLE `k_v` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) DEFAULT NULL,
+  `value` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `k_v` */
 
 /*Table structure for table `permissions` */
 
@@ -121,22 +126,19 @@ CREATE TABLE `permissions` (
   `description` varchar(255) DEFAULT NULL COMMENT '权限描述',
   PRIMARY KEY (`id`),
   UNIQUE KEY `permission_name` (`permission_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `permissions` */
 
-/*Table structure for table `role_permissions` */
-
-DROP TABLE IF EXISTS `role_permissions`;
-
-CREATE TABLE `role_permissions` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `role_id` bigint NOT NULL COMMENT '角色ID',
-  `permission_id` bigint NOT NULL COMMENT '权限ID',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-/*Data for the table `role_permissions` */
+insert  into `permissions`(`id`,`permission_name`,`description`) values 
+(0,'所有权限','*'),
+(7,'文章查看','/article/select'),
+(8,'标签查看','/tag/select'),
+(9,'评论查看','/comment/select'),
+(10,'评论添加','/comment/insert'),
+(11,'分类查看','/category/select'),
+(12,'文件上传','/file/upload'),
+(15,'文件下载/查看','/file/download');
 
 /*Table structure for table `roles` */
 
@@ -148,9 +150,50 @@ CREATE TABLE `roles` (
   `description` varchar(255) DEFAULT NULL COMMENT '角色描述',
   PRIMARY KEY (`id`),
   UNIQUE KEY `role_name` (`role_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `roles` */
+
+insert  into `roles`(`id`,`role_name`,`description`) values 
+(0,'管理员','最高权限'),
+(1,'游客','游览权限'),
+(2,'用户','拥有文章投稿权限');
+
+/*Table structure for table `roles_permissions` */
+
+DROP TABLE IF EXISTS `roles_permissions`;
+
+CREATE TABLE `roles_permissions` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `roles_id` bigint DEFAULT NULL COMMENT '角色id',
+  `permissions_id` bigint DEFAULT NULL COMMENT '权限id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `roles_id` (`roles_id`,`permissions_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=147 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `roles_permissions` */
+
+insert  into `roles_permissions`(`id`,`roles_id`,`permissions_id`) values 
+(0,0,0),
+(130,1,7),
+(131,1,8),
+(125,1,9),
+(129,1,10),
+(126,1,11),
+(128,1,12),
+(127,1,14),
+(141,2,7),
+(144,2,8),
+(145,2,9),
+(146,2,10),
+(142,2,11),
+(143,2,12),
+(138,4,7),
+(137,4,8),
+(132,4,9),
+(136,4,10),
+(133,4,11),
+(135,4,12);
 
 /*Table structure for table `tags` */
 
@@ -163,9 +206,38 @@ CREATE TABLE `tags` (
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `tag_name` (`tag_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `tags` */
+
+insert  into `tags`(`id`,`tag_name`,`created_at`,`updated_at`) values 
+(26,'测试','2024-05-08 18:48:48','2024-05-08 18:48:48'),
+(27,'生活','2024-05-08 18:48:48','2024-05-08 18:48:48'),
+(28,'代码','2024-05-08 18:48:48','2024-05-08 18:48:48'),
+(29,'rust','2024-05-08 18:48:48','2024-05-08 18:48:48'),
+(30,'vue','2024-05-08 18:48:48','2024-05-08 18:48:48'),
+(31,'axum','2024-05-08 18:48:48','2024-05-08 18:48:48');
+
+/*Table structure for table `timeline` */
+
+DROP TABLE IF EXISTS `timeline`;
+
+CREATE TABLE `timeline` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `title` varchar(50) NOT NULL,
+  `content` varchar(255) DEFAULT NULL,
+  `time` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `timeline` */
+
+insert  into `timeline`(`id`,`type`,`title`,`content`,`time`) values 
+(6,'info','博客程序前端架构编写',NULL,'2024-05-01 17:55:40'),
+(7,'success','博客程序基本功能实现',NULL,'2024-05-07 17:55:40'),
+(8,'warning','自定义界面功能暂停开发',NULL,'2024-05-08 17:55:40'),
+(9,'error','暂未论文编写','痛苦','2024-05-09 17:55:40');
 
 /*Table structure for table `user` */
 
@@ -183,12 +255,13 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `user` */
 
 insert  into `user`(`id`,`username`,`password`,`email`,`nickname`,`avatar`,`create_time`,`update_time`) values 
-(1,'hhzx','123456','2831828656@qq.com','用户','无','2024-04-27 18:08:29','2024-04-27 18:08:29');
+(0,'hhzx','123456','2831828656@qq.com','hhzx','http://q1.qlogo.cn/g?b=qq&nk=2831828656&s=100','2024-04-27 18:08:29','2024-04-27 18:08:29'),
+(5,'user1','123123','123@qq.com','用户',NULL,'2024-05-04 22:03:07','2024-05-04 22:03:07');
 
 /*Table structure for table `user_roles` */
 
@@ -199,9 +272,13 @@ CREATE TABLE `user_roles` (
   `user_id` bigint NOT NULL COMMENT '用户ID',
   `role_id` bigint NOT NULL COMMENT '角色ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `user_roles` */
+
+insert  into `user_roles`(`id`,`user_id`,`role_id`) values 
+(1,0,0),
+(2,5,2);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
