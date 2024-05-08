@@ -13,8 +13,7 @@ pub struct Model {
     pub article_tags: Option<String>,
     pub title: String,
     pub cover: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
-    pub content: Option<String>,
+    pub router: Option<String>,
     #[sea_orm(column_type = "Text", nullable)]
     pub markdown: Option<String>,
     #[sea_orm(column_type = "Text", nullable)]

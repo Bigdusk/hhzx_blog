@@ -30,4 +30,5 @@ tower-http = { version = "0.5.2", features = ["full"] }
 jsonwebtoken = "9.3.0"
 # 分布式id生成
 nanoid = "0.4.0"
+http = "1.1.0"
 

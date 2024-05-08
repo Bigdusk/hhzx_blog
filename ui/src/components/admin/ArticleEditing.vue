@@ -14,9 +14,9 @@ onMounted(() => {
   data_all()
   article_by_id()
 })
-function article_by_id() {
+async function article_by_id() {
   const route = useRoute()
-  axios_util.get<Article>('/article/' + route.params.id).then(r => {
+  axios_util.get<Article>('/article/select/' + route.params.id).then(r => {
     article.value = r.data
     tags.value = r.data.article_tags?.split(',')
   })
@@ -29,7 +29,7 @@ interface category_view {
 //分类
 const category_all = ref<category_view[]>([])
 async function data_all() {
-  await axios_util.get<Category[]>('/category/select/all').then(r => {
+  axios_util.get<Category[]>('/category/select/all').then(r => {
     console.log(r)
     r.data.forEach( r => {
       category_all.value.push({
@@ -43,7 +43,7 @@ async function data_all() {
 const article = ref<Article>({
   id: 0,
 })
-function article_update() {
+async function article_update() {
   //将标签赋值
   article.value.article_tags = tags.value.toString()
   axios_util.post<boolean>('/article/update', article.value).then(r => {
@@ -144,6 +144,7 @@ const handleFinish = ({
   const ext = r.data.split('/')
   file.name = ext[ext.length - 1]
   file.url = r.data
+  article.value.cover = r.data
   return file
 }
 </script>

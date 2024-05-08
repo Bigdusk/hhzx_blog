@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/api/src/bin/cors/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/api/src/bin/hhzx_cors/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/api/src/bin/hhzx_log/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/api/src/bin/hhzx_auth/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/api/target" />
       <excludeFolder url="file://$MODULE_DIR$/api_lib/target" />
     </content>

@@ -2,12 +2,15 @@
 import {h, ref, onMounted} from 'vue'
 import {NButton} from 'naive-ui'
 import type {DataTableColumns} from 'naive-ui'
-
+import type {Comment} from "@/entity";
+import axios_util from "@/utils/axios_util";
+import {message} from "@/utils";
 onMounted(() => {
   data_all()
 })
 
-function data_all() {
+const createData = ref<Comment[]>()
+async function data_all() {
   axios_util.get('/comment/select/all').then(r => {
     console.log(r)
     createData.value = r.data
@@ -26,7 +29,7 @@ const createColumns = ({
     },
     {
       title: '父id',
-      key: 'parent_id'
+      key: 'comment_id'
     },
     {
       title: '内容',
@@ -37,7 +40,7 @@ const createColumns = ({
       key: 'create_time'
     },
     {
-      title: 'Action',
+      title: '谨慎删除',
       key: 'actions',
       render(row) {
         return h(
@@ -53,7 +56,6 @@ const createColumns = ({
   ]
 }
 
-const createData = ref<Comment[]>()
 const columns = createColumns({
   sendMail(rowData) {
     axios_util.get('/comment/delete/' + rowData.id).then(r => {
@@ -73,11 +75,8 @@ const pagination = {
   pageSize: 10
 }
 
-import {createDiscreteApi} from "naive-ui";
-import type {Comment} from "@/entity";
-import axios_util from "@/utils/axios_util";
 
-const {message} = createDiscreteApi(['message'])
+
 </script>
 
 <template>

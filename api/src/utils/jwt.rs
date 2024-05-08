@@ -6,7 +6,6 @@ use jsonwebtoken::{encode, Algorithm, Header, EncodingKey, Validation, decode, D
 use sea_orm::{DatabaseConnection, EntityTrait};
 use crate::entity::user;
 
-
 ///token加密密钥
 pub const KEY: &[u8] = b"secret";
 #[derive(Debug, Serialize, Deserialize)]
@@ -47,17 +46,15 @@ pub fn create_token(user_id: i64) -> Result<String, Box<dyn std::error::Error>>{
     }
 }
 
-pub fn decode_token(token: &str) -> Result<TokenData<Claims>, Box<dyn std::error::Error>>{
+pub fn decode_token(token: &str) -> jsonwebtoken::errors::Result<TokenData<Claims>> {
     let key = &DecodingKey::from_secret(KEY);
     let validation = &Validation::new(Algorithm::HS256);
     let token_message = decode::<Claims>(token, key, validation);
-    match token_message {
-        Ok(val) => {Ok(val)}
-        Err(_) => {Err(Box::from("解析token失败"))}
-    }
+
+    token_message
 }
 
-///根据token获取用户信息
+///根据请求头获取用户信息
 pub async  fn get_user_info(
     header_map: &HeaderMap,
     db: &DatabaseConnection

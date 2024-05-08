@@ -23,7 +23,7 @@ interface category_view {
 const category_all = ref<category_view[]>([])
 
 async function data_all() {
-  await axios_util.get<Category[]>('/category/select/all').then(r => {
+  axios_util.get<Category[]>('/category/select/all').then(r => {
     console.log(r)
     r.data.forEach(r => {
       category_all.value.push({
@@ -134,6 +134,7 @@ const handleFinish = ({
   const ext = r.data.split('/')
   file.name = ext[ext.length - 1]
   file.url = r.data
+  article.value.cover = r.data
   return file
 }
 //弹出
@@ -181,7 +182,7 @@ const activate = (place: DrawerPlacement) => {
       @onUploadImg="onUploadImg"
   />
 
-
+  {{tags.toString()}}
   <n-drawer
       v-model:show="active"
       :width="200"

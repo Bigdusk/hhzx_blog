@@ -1,39 +1,46 @@
+use axum::Extension;
 use axum::extract::{Path, State};
-use axum::http::HeaderMap;
 use axum::response::Json;
 use chrono::Local;
-use sea_orm::{ActiveModelTrait, DatabaseConnection, DbBackend, EntityTrait, FromQueryResult, IntoActiveModel, JsonValue, NotSet, Statement};
+use log::info;
+use sea_orm::{ActiveModelBehavior, ActiveModelTrait, DatabaseConnection, DbBackend, EntityTrait, FromQueryResult, IntoActiveModel, JsonValue, NotSet, sea_query, Statement};
 use sea_orm::ActiveValue::Set;
 use serde_json::Value;
 use crate::utils::result::ResultUtil;
-use crate::entity::article;
-use crate::utils::jwt;
+use crate::entity::{article, user};
+use crate::entity::tags;
 
 ///添加文章
 pub async fn insert(
-    header_map: HeaderMap,
+    Extension(current_user): Extension<user::Model>,
     State(db): State<DatabaseConnection>,
     Json(article): Json<article::Model>,
 ) -> Json<Value> {
-    let user_info = {
-        let user_info = jwt::get_user_info(&header_map, &db).await;
-        match user_info {
-            Ok(r) => { r }
-            Err(r) => {
-                return ResultUtil::<&str>::code_and_error(10010, r.to_string().as_str());
-            }
-        }
-    };
 
     //创建文章
     let mut article = article.into_active_model();
 
     article.id = NotSet;
-    article.user_id = Set(Some(user_info.id));
+    article.user_id = Set(Some(current_user.id));
     article.publish_time = Set(Some(Local::now().naive_local()));
     article.update_time = Set(Some(Local::now().naive_local()));
     article.likes = Set(Some(0));
     article.views = Set(Some(0));
+
+    //标签添加
+    let tags = article.clone().article_tags
+        .into_value()
+        .unwrap_or(sea_query::value::Value::from("默认"))
+        .to_string();
+    let tags = &tags[1..tags.len() - 1];
+    for tag_name in tags.split(",") {
+        let mut tag_temp = tags::ActiveModel::new();
+        tag_temp.id = NotSet;
+        tag_temp.tag_name = Set(tag_name.to_string());
+        tag_temp.updated_at = Set(Local::now().naive_local());
+        tag_temp.created_at = Set(Local::now().naive_local());
+        let _ = tag_temp.insert(&db).await;
+    }
 
     let r = article.insert(&db).await;
 
@@ -58,11 +65,27 @@ pub async fn update(
     article_info.article_tags = Set(article_info.article_tags.unwrap());
     article_info.title = Set(article_info.title.unwrap());
     article_info.cover = Set(article_info.cover.unwrap());
-    article_info.content = Set(article_info.content.unwrap());
+    article_info.router = Set(article_info.router.unwrap());
     article_info.markdown = Set(article_info.markdown.unwrap());
     article_info.html = Set(article_info.html.unwrap());
     article_info.update_time = Set(Some(Local::now().naive_local()));
     article_info.status = Set(article_info.status.unwrap());
+
+    //标签添加
+    let tags = article_info.clone().article_tags
+        .into_value()
+        .unwrap_or(sea_query::value::Value::from("默认"))
+        .to_string();
+    let tags = &tags[1..tags.len() - 1];
+    info!("{:?}", tags);
+    for tag_name in tags.split(",") {
+        let mut tag_temp = tags::ActiveModel::new();
+        tag_temp.id = NotSet;
+        tag_temp.tag_name = Set(tag_name.to_string());
+        tag_temp.updated_at = Set(Local::now().naive_local());
+        tag_temp.created_at = Set(Local::now().naive_local());
+        let _ = tag_temp.insert(&db).await;
+    }
 
     let r = article_info.update(&db).await;
 

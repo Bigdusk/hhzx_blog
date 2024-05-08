@@ -23,8 +23,8 @@ const showModal = ref(false)
 
 const route = useRoute()
 //获取文章信息
-function article_by_id() {
-  axios_util.get<Article>('/article/' + route.params.id).then(r => {
+async function article_by_id() {
+  axios_util.get<Article>('/article/select/' + route.params.id).then(r => {
     article.value = r.data
   })
 }
@@ -59,7 +59,7 @@ const comment_list = ref<{
 }[]>([])
 
 //添加评论
-function comment_insert() {
+async function comment_insert() {
   comment.value.comment_id = undefined
   axios_util.post('/comment/insert', comment.value).then(r => {
     if (r.data) {
@@ -71,7 +71,7 @@ function comment_insert() {
 }
 
 //回复评论
-function reply_comment_insert(comment_id?: number) {
+async function reply_comment_insert(comment_id?: number) {
   comment.value.comment_id = comment_id
   axios_util.post('/comment/insert', comment.value).then(r => {
     comment.value.comment_id = undefined
@@ -86,7 +86,7 @@ function reply_comment_insert(comment_id?: number) {
 
 //查询评论
 async function comment_select_all() {
-  await axios_util.get('/comment/select/article/' + route.params.id).then(r => {
+  axios_util.get('/comment/select/article/' + route.params.id).then(r => {
     comment_list.value = r.data
   })
 }
@@ -104,7 +104,7 @@ async function comment_select_all() {
 
           <n-card class="l-box" :bordered="false" embedded hoverable>
             <n-button>
-              点赞
+              未经作者授权，禁止转载
             </n-button>
           </n-card>
         </n-card>
@@ -154,6 +154,7 @@ async function comment_select_all() {
             <div style="font-size: 1.3em">
               <QQname :qq="r[0].qq"/>
             </div>
+            {{ r[0].create_time }}
             <n-button @click="showModal = true">回复</n-button>
 
             <n-modal v-model:show="showModal">

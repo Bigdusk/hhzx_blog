@@ -5,3 +5,6 @@ pub mod login_controller;
 pub mod file_upload_controller;
 pub mod user_controller;
 pub mod comment_controller;
+pub mod tag_controller;
+pub mod permissions_controller;
+pub mod timeline_controller;

@@ -40,10 +40,6 @@ const router = createRouter({
           component: () => import("@/components/admin/ArticleEditing.vue")
         },
         {
-          path: '/admin/article_list',
-          component: () => import("@/components/admin/ArticleList.vue")
-        },
-        {
           path: '/admin/category',
           component: () => import("@/components/admin/Category.vue")
         },
@@ -58,6 +54,10 @@ const router = createRouter({
         {
           path: '/admin/user',
           component: () => import("@/components/admin/User.vue")
+        },
+        {
+          path: '/admin/permissions',
+          component: () => import("@/components/admin/Permissions.vue")
         }
       ]
     }

@@ -1,11 +1,11 @@
 use axum::extract::{Path, State};
 use axum::Json;
 use chrono::Local;
-use sea_orm::{ActiveModelTrait, ColumnTrait, Condition, DatabaseConnection, EntityTrait, IntoActiveModel, NotSet, QueryFilter};
+use sea_orm::{ActiveModelTrait, ColumnTrait, Condition, DatabaseConnection, EntityTrait, IntoActiveModel, NotSet, Order, QueryFilter, QueryOrder, TransactionTrait};
 use sea_orm::ActiveValue::Set;
 use serde_json::Value;
 use crate::utils::result::ResultUtil;
-use crate::entity::{comment, user};
+use crate::entity::comment;
 
 
 pub async fn insert(
@@ -35,21 +35,44 @@ pub async fn delete_by_id(
     State(db): State<DatabaseConnection>,
     Path(id): Path<i64>,
 ) -> Json<Value> {
+    //删除关联评论
+    let deletes = comment::Entity::delete_many()
+        .filter(
+            Condition::all()
+                .add(
+                    comment::Column::CommentId.eq(id)
+                )
+        )
+        .exec(&db)
+        .await;
+    match deletes {
+        Ok(_r) => {}
+        Err(_) => {return ResultUtil::<String>::error("删除关联评论失败")}
+    }
 
-    let result = user::Entity::delete_by_id(id).exec(&db).await;
-
-    match result {
+    let r = comment_delete_by_id(db, id).await;
+    match r {
         Ok(r) => {
-            if r.rows_affected > 0 {
-                ResultUtil::success(true)
-            } else {
-                ResultUtil::<String>::error("删除失败")
-            }
+            r
         }
-        Err(_) => {
-            ResultUtil::<String>::error("删除失败")
+        Err(r) => {
+            ResultUtil::<String>::error(r.to_string().as_str())
         }
     }
+}
+
+async fn comment_delete_by_id(db: DatabaseConnection, id: i64) -> Result<Json<Value>, Box<dyn std::error::Error>>{
+    let txn = db.begin().await?;
+    comment::Entity::delete_by_id(id).exec(&txn).await?;
+    comment::Entity::delete_many()
+        .filter(
+            comment::Column::CommentId.eq(id)
+        )
+        .exec(&txn)
+        .await?;
+    txn.commit().await?;
+
+    Ok(ResultUtil::success(true))
 }
 
 
@@ -57,7 +80,7 @@ pub async fn select_all(
     State(db): State<DatabaseConnection>
 ) -> Json<Value> {
 
-    let result = comment::Entity::find().all(&db).await;
+    let result = comment::Entity::find().order_by(comment::Column::Id, Order::Desc).all(&db).await;
 
     match result {
         Ok(r) => {

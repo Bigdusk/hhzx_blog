@@ -30,7 +30,7 @@ axios_util.interceptors.response.use(
         console.log(response)
         if (response.data.code === 10010) {
             message.warning(response.data.message)
-            to_path('/')
+            to_path('/login')
         }
         if (response.data.code === 500) {
             message.warning(response.data.message)
@@ -40,6 +40,10 @@ axios_util.interceptors.response.use(
     error => {
         console.log("错误")
         console.log(error)
+        if (error.response.status === 401) {
+            message.warning('请重新登录')
+            //to_path('/login')
+        }
         if (error.response.status === 422) {
             message.warning('请填写完整参数')
         }

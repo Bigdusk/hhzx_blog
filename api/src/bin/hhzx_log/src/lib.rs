@@ -10,7 +10,7 @@ pub async fn log(
     next: Next,
 ) -> Response {
     // 对请求做一些处理
-    println!("{:#?}", request);
+    //println!("{:#?}", request);
     //......
 
     //调用下一个中间价

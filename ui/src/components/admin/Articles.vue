@@ -7,7 +7,7 @@ onMounted(() => {
   data_all()
 })
 async function data_all() {
-  await axios_util.get<Article[]>('/article/select/all').then(r => {
+  axios_util.get<Article[]>('/article/select/all').then(r => {
     console.log(r)
     createData.value = r.data
   })
@@ -33,7 +33,7 @@ const createColumns = ({
       key: 'category_name'
     },
     {
-      title: '编辑',
+      title: '操作',
       key: 'actions',
       render(row) {
         return h(
@@ -91,7 +91,7 @@ const showModal = ref(false)
 const body = ref<Article>({})
 
 async function date_delete(id?: number) {
-  await axios_util.get<boolean>('/article/delete/' + id).then(r => {
+  axios_util.get<boolean>('/article/delete/' + id).then(r => {
     if (r.data) {
       message.success('删除成功')
       data_all()

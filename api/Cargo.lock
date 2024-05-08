@@ -150,6 +150,7 @@ dependencies = [
  "dotenv",
  "env_logger",
  "hhzx_log",
+ "http",
  "jsonwebtoken",
  "log",
  "nanoid",

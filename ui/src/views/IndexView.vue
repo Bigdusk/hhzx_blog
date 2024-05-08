@@ -10,19 +10,27 @@ import {onMounted, ref} from "vue";
 import {to_path} from "@/utils";
 import {useCounterStore} from "@/stores/counter";
 import axios_util from "@/utils/axios_util";
-import type {Category} from "@/entity";
+import type {Category, Tags} from "@/entity";
 const counter = useCounterStore()
 onMounted(() => {
-  counter.article_all()
   category_all()
+  tag_page(1, 10)
 })
 //查询分类
 const category_list = ref<Category[]>([])
 async function category_all() {
-  await axios_util.get<Category[]>('/category/select/all').then(r => {
+  axios_util.get<Category[]>('/category/select/all').then(r => {
     category_list.value = r.data
   })
 }
+//查询所有标签
+const tag_list = ref<Tags[]>([])
+async function tag_page(page: number, size: number) {
+  axios_util.get('/tag/select/'+ page +'/'+size).then(r => {
+    tag_list.value = r.data
+  })
+}
+
 </script>
 
 <template>
@@ -30,7 +38,10 @@ async function category_all() {
   <div class="m-box">
 
     <div class="a-box">
+
       <div class="a-list-box">
+        <n-spin :show="counter.show_spin">
+        <div v-if="counter.article_list.length <= 0">没有更多数据</div>
         <n-card style="margin-bottom: 32px;padding: 2px;border-radius: .5rem;"
                 v-for="r in counter.article_list"
                 :title="r.title"
@@ -59,6 +70,7 @@ async function category_all() {
             </n-button>
           </n-flex>
         </n-card>
+        </n-spin>
       </div>
 
       <div class="u-info-box">
@@ -81,7 +93,6 @@ async function category_all() {
             <n-button
                 v-for="r in category_list"
                 @click="to_path('/category/'+ r.category_name + '/' + r.id)"
-                type="primary"
                 dashed
             >
               {{ r.category_name }}
@@ -90,8 +101,8 @@ async function category_all() {
               Tags
             </div>
             <n-space>
-              <n-tag v-for="i in 10" type="success">
-                标签
+              <n-tag v-for="r in tag_list" :key="r.id" type="success">
+                {{ r.tag_name }}
               </n-tag>
             </n-space>
           </n-flex>

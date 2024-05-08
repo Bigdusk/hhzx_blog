@@ -8,7 +8,7 @@ onMounted(() => {
 })
 //查询所有分类
 async function data_all() {
-  await axios_util.get<Category[]>('/category/select/all').then(r => {
+  axios_util.get<Category[]>('/category/select/all').then(r => {
     console.log(r)
     createData.value = r.data
   })
@@ -95,7 +95,7 @@ const showModal2 = ref(false)
 const body = ref<Category>({})
 
 async function update() {
-  await axios_util.post<boolean>('/category/update', body.value).then(r => {
+  axios_util.post<boolean>('/category/update', body.value).then(r => {
     if (r.data) {
       message.success('保存成功')
       data_all()
@@ -106,7 +106,7 @@ async function update() {
 }
 
 async function date_delete(id: any) {
-  await axios_util.get<boolean>('/category/delete/' + id).then(r => {
+  axios_util.get<boolean>('/category/delete/' + id).then(r => {
     if (r.data) {
       message.success('删除成功')
       data_all()
@@ -118,7 +118,7 @@ async function date_delete(id: any) {
 //添加接口
 async function data_insert() {
   body.value.id = 0
-  await axios_util.post<boolean>('/category/insert', body.value).then(r => {
+  axios_util.post<boolean>('/category/insert', body.value).then(r => {
     if (r.data) {
       message.success('添加成功')
       data_all()
@@ -167,7 +167,6 @@ async function data_insert() {
         <n-input v-model:value="body.ioc"/>
       </n-form-item>
     </n-form>
-    {{ body }}
     <template #footer>
       <n-flex justify="space-between">
         <n-button @click="update" type="success">保存</n-button>

@@ -1,33 +1,27 @@
+use std::error::Error;
 use axum::extract::{Path, State};
 use axum::Json;
-use chrono::Local;
-use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait, IntoActiveModel, NotSet};
+use http::HeaderMap;
+use sea_orm::{ActiveModelTrait, ColumnTrait, Condition, DatabaseConnection, EntityTrait, IntoActiveModel, QueryFilter, TransactionTrait};
 use sea_orm::ActiveValue::Set;
 use serde_json::Value;
 use crate::entity::user;
+use crate::entity::user_roles;
 use crate::utils::result::ResultUtil;
-
-///添加
-pub async fn insert(
+use crate::utils::jwt;
+///获取登录个人信息
+pub async fn login_user_info(
     State(db): State<DatabaseConnection>,
-    Json(user_info): Json<user::Model>
-) -> Json<Value>
+    header_map: HeaderMap,
+)  -> Json<Value>
 {
-    let mut category_info = user_info.into_active_model();
-
-    category_info.id = NotSet;
-    category_info.create_time = Set(Some(Local::now().naive_local()));
-    category_info.update_time = Set(Some(Local::now().naive_local()));
-
-    let r = category_info.insert(&db).await;
-
+    let r = jwt::get_user_info(&header_map, &db).await;
     match r {
-        Ok(r) => {
+        Ok(mut r) => {
+            r.password = "保护".to_string();
             ResultUtil::success(r)
         }
-        Err(r) => {
-            ResultUtil::<&str>::error(r.to_string().as_str())
-        }
+        Err(_) => {ResultUtil::<&str>::code_and_error(10010, "获取用户登录信息失败")}
     }
 }
 ///删除
@@ -36,23 +30,40 @@ pub async fn delete(
     Path(user_id): Path<i64>
 ) -> Json<Value>
 {
-    let r = user::Entity::delete_by_id(user_id)
-        .exec(&db)
-        .await;
+    if user_id == 0 {
+        return ResultUtil::<&str>::error("默认权限无法修改")
+    }
+    let r = user_delete_service(db, user_id).await;
 
     match r {
-        Ok(r) => {
-            if r.rows_affected > 0 {
-                ResultUtil::success(true)
-            }else {
-                ResultUtil::<&str>::error("删除失败")
-            }
-        }
-        Err(r) => {
-            ResultUtil::<&str>::error(r.to_string().as_str())
-        }
+        Ok(r) => {r}
+        Err(r) => {ResultUtil::<&str>::error(r.to_string().as_str())}
     }
+
 }
+
+async fn user_delete_service(db: DatabaseConnection, user_id: i64)
+-> Result<Json<Value>, Box<dyn std::error::Error>>
+{
+    let txn = db.begin().await?;
+    user::Entity::delete_by_id(user_id)
+        .exec(&txn)
+        .await?;
+    //删除对应权限
+    user_roles::Entity::delete_many()
+        .filter(
+            Condition::all()
+                .add(
+                    user_roles::Column::UserId.eq(user_id)
+                )
+        )
+        .exec(&txn)
+        .await?;
+    txn.commit().await?;
+
+    Ok(ResultUtil::success(true))
+}
+
 ///修改
 pub async fn update(
     State(db): State<DatabaseConnection>,

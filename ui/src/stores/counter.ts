@@ -43,16 +43,18 @@ export const useCounterStore = defineStore('counter', () => {
     const size = ref(5)
     const search_value = ref<string | undefined>('')
 //设置搜索信息
-    function search_value_set(value: string) {
+    async function search_value_set(value: string) {
         search_value.value = value
     }
 //获取全部文章
-    function article_all() {
+    async function article_all() {
+        show_spin.value = true
         if (search_value.value === '') {
             search_value.value = 'undefined'
         }
-        axios_util.get<ArticleInfo[]>('/article/' + page.value + '/' + size.value + '/title/' + search_value.value).then(r => {
+        axios_util.get<ArticleInfo[]>('/article/select/' + page.value + '/' + size.value + '/title/' + search_value.value).then(r => {
             article_list.value = r.data
+            show_spin.value = false
         })
     }
 
@@ -60,10 +62,11 @@ export const useCounterStore = defineStore('counter', () => {
 
 //所有文章下一页
     async function LoadMoreArticles() {
+        show_spin.value = true
         if (search_value.value === '') {
             search_value.value = 'undefined'
         }
-        await axios_util.get<ArticleInfo[]>('/article/' + ++page.value + '/' + size.value + '/title/' + search_value.value)
+        axios_util.get<ArticleInfo[]>('/article/select/' + ++page.value + '/' + size.value + '/title/' + search_value.value)
             .then(r => {
                 if (r.data.length > 0) {
                     r.data.forEach(r => {
@@ -72,10 +75,15 @@ export const useCounterStore = defineStore('counter', () => {
                 } else {
                     message.success('到了尽头...')
                 }
-
+                show_spin.value = false
             })
     }
 
+    //加载蒙版
+    const show_spin = ref(false)
+    function set_spin(b: boolean) {
+        show_spin.value = b
+    }
     return {
         theme,
         is_masks,
@@ -87,6 +95,8 @@ export const useCounterStore = defineStore('counter', () => {
         article_all,
         article_list,
         LoadMoreArticles,
-        search_value_set
+        search_value_set,
+        show_spin,
+        set_spin
     }
 })

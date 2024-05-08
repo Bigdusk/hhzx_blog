@@ -7,7 +7,7 @@
     <img src="@/assets/img/illustration/与猫贴贴.png" alt="怅然">
     <div class="img-box-text">
       <div>
-        <h1>Hhzx`s blog</h1>
+        <h1>Hello world</h1>
         <p>无根树，花正幽，</p>
         <p>贪恋荣华谁肯休。</p>
         <p>浮生事，苦海舟，</p>

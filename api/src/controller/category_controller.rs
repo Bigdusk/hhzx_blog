@@ -1,10 +1,10 @@
 use axum::extract::{Path, State};
 use axum::Json;
 use chrono::Local;
-use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait, IntoActiveModel, NotSet};
+use sea_orm::{ActiveModelTrait, ColumnTrait, Condition, DatabaseConnection, EntityTrait, IntoActiveModel, NotSet, QueryFilter};
 use sea_orm::ActiveValue::Set;
 use serde_json::Value;
-use crate::entity::category;
+use crate::entity::{category, article};
 use crate::utils::result::ResultUtil;
 
 ///添加
@@ -36,6 +36,26 @@ pub async fn delete(
     Path(category_id): Path<i64>
 ) -> Json<Value>
 {
+    //判断是否还有文章
+    let article_list = article::Entity::find()
+        .filter(
+            Condition::all()
+                .add(
+                    article::Column::CategoryId.eq(category_id)
+                )
+        )
+        .all(&db)
+        .await;
+    match article_list {
+        Ok(r) => {
+            if r.len() > 0 {
+                return ResultUtil::<&str>::error("该分类还有关联文章")
+            }
+        }
+        Err(r) => {return ResultUtil::<&str>::error(r.to_string().as_str())}
+    }
+
+    //执行删除
     let r = category::Entity::delete_by_id(category_id)
         .exec(&db)
         .await;

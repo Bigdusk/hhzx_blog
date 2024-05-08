@@ -5,9 +5,13 @@ import {MenuOutline, MoonOutline, SunnyOutline} from '@vicons/ionicons5'
 import {onMounted, ref} from "vue";
 import router from "@/router";
 import {to_path} from "@/utils";
+import type {Category} from "@/entity";
+import axios_util from "@/utils/axios_util";
 
 onMounted(() => {
   set_page_show()
+  category_all()
+  counter.article_all()
 })
 function set_page_show() {
   let path = window.location.pathname
@@ -33,6 +37,14 @@ function search() {
   counter.search_value_set(search_value.value)
   counter.article_all()
   to_path('/')
+}
+
+//查询分类
+const category_list = ref<Category[]>([])
+async function category_all() {
+  axios_util.get<Category[]>('/category/select/all').then(r => {
+    category_list.value = r.data
+  })
 }
 </script>
 
@@ -60,8 +72,11 @@ function search() {
                 搜索
               </n-button>
             </n-input-group>
-            <n-button v-for="i in 3">
-              导航
+            <n-button @click="to_path('/')" type="primary" dashed>
+              首页
+            </n-button>
+            <n-button @click="to_path('/login')" type="primary" dashed>
+              登录
             </n-button>
           </n-space>
         </div>
@@ -102,14 +117,21 @@ function search() {
         <div>
           Nav
         </div>
-        <n-button v-for="i in 3" type="primary" dashed>
-          导航
+        <n-button @click="to_path('/')" type="primary" dashed>
+          首页
+        </n-button>
+        <n-button @click="to_path('/login')" type="primary" dashed>
+          登录
         </n-button>
         <div>
           Categories
         </div>
-        <n-button v-for="i in 5" type="primary" dashed>
-          分类
+        <n-button
+            @click="to_path('/category/'+ r.category_name + '/' + r.id)"
+            v-for="r in category_list"
+            :key="r.id"
+            dashed>
+          {{ r.category_name }}
         </n-button>
       </n-flex>
 

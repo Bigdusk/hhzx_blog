@@ -26,8 +26,8 @@ const page = ref(1)
 const size = ref(5)
 const route = useRoute()
 //获取全部文章
-function article_all() {
-  axios_util.get<ArticleInfo[]>('/article/' + page.value + '/' + size.value + '/category/' + route.params.id).then(r => {
+async function article_all() {
+  axios_util.get<ArticleInfo[]>('/article/select/' + page.value + '/' + size.value + '/category/' + route.params.id).then(r => {
     article_list.value = r.data
   })
 }
@@ -36,7 +36,7 @@ const article_list = ref<ArticleInfo[]>([])
 
 //所有文章下一页
 async function LoadMoreArticles() {
-  await axios_util.get<ArticleInfo[]>('/article/' + ++page.value + '/' + size.value + '/category/' + route.params.id)
+  axios_util.get<ArticleInfo[]>('/article/select/' + ++page.value + '/' + size.value + '/category/' + route.params.id)
       .then(r => {
         if (r.data.length > 0) {
           r.data.forEach(r => {

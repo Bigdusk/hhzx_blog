@@ -3,22 +3,23 @@
 import {ref} from "vue";
 import type {User} from "@/entity";
 import axios_util from "@/utils/axios_util";
-import {message} from "@/utils";
+import {message, to_path} from "@/utils";
 
 const user = ref<User>({id: -1})
 
 function login() {
   axios_util.post<string>('/login', user.value).then(r => {
-    if (r) {
+    if (r.data) {
       message.success('登录成功')
       localStorage.setItem('authorization', r.data)
+      to_path('/admin')
     }
   })
 }
 
 function registration() {
   axios_util.post<string>('/registration', user.value).then(r => {
-    if (r) {
+    if (r.data) {
       message.success('注册成功')
       localStorage.setItem('authorization', r.data)
     }

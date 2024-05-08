@@ -1,24 +1,41 @@
 <script setup lang="ts">
-import {darkTheme} from "naive-ui";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {useCounterStore} from "@/stores/counter";
 import {
   MoonOutline,
   SunnyOutline,
   Home,
-  List,
   PencilSharp,
   GridSharp,
   ChatboxEllipses,
   Person,
   Settings,
-  Exit
+  Exit,
+  DocumentLockSharp
 } from '@vicons/ionicons5'
 import {to_path} from "@/utils";
+import type {User} from "@/entity";
+import axios_util from "@/utils/axios_util";
 
 const counter = useCounterStore()
 //颜色
 const p_color = ref()
+
+//获取用户信息
+onMounted(() => {
+  login_user_info()
+})
+const user_info = ref<User>({})
+function login_user_info() {
+  axios_util.get('/user/login/info').then(r => {
+    user_info.value = r.data
+  })
+}
+//退出登录
+function user_out() {
+  localStorage.removeItem('authorization')
+  to_path('/')
+}
 </script>
 
 <template>
@@ -29,7 +46,7 @@ const p_color = ref()
           <n-divider dashed>
             <n-avatar
                 :size="48"
-                src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+                :src="user_info.avatar"
             />
           </n-divider>
         </div>
@@ -63,6 +80,12 @@ const p_color = ref()
             <ChatboxEllipses/>
           </n-icon>
         </n-button>
+
+        <n-button text @click="to_path('/admin/permissions')" style="font-size: 24px">
+          <n-icon>
+            <DocumentLockSharp/>
+          </n-icon>
+        </n-button>
       </div>
 
       <div class="left-nav-m">
@@ -71,7 +94,7 @@ const p_color = ref()
             <Settings/>
           </n-icon>
         </n-button>
-        <n-button text style="font-size: 24px">
+        <n-button @click="user_out" text style="font-size: 24px">
           <n-icon>
             <Exit/>
           </n-icon>
@@ -125,6 +148,7 @@ const p_color = ref()
   width: 100%;
   height: 100vh;
   padding: 40px 60px 40px 142px;
+  z-index: 888;
 }
 .m-box {
   width: 100%;

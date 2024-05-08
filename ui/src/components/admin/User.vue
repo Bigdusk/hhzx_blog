@@ -5,11 +5,11 @@ import type {DataTableColumns} from 'naive-ui'
 
 onMounted(() => {
   data_all()
+  roles_all()
 })
 
 async function data_all() {
-  await axios_util.get<User[]>('/user/select/all').then(r => {
-    console.log(r)
+  axios_util.get<User[]>('/user/select/all').then(r => {
     createData.value = r.data
   })
 }
@@ -33,7 +33,7 @@ const createColumns = ({
       key: 'email'
     },
     {
-      title: '编辑',
+      title: '操作',
       key: 'actions',
       render(row) {
         return h(
@@ -52,6 +52,7 @@ const createColumns = ({
 const createData = ref<User[]>()
 const columns = createColumns({
   sendMail(rowData) {
+    user_roles_now(rowData.id)
     showModal.value = true
     body.value = rowData
   }
@@ -62,7 +63,7 @@ const pagination = {
 }
 
 import {createDiscreteApi} from "naive-ui";
-import type {User} from "@/entity";
+import type {Roles, User, UserRoles} from "@/entity";
 import axios_util from "@/utils/axios_util";
 
 const {message} = createDiscreteApi(['message'])
@@ -79,7 +80,7 @@ const showModal = ref(false)
 const body = ref<User>({})
 
 async function update() {
-  await axios_util.post<boolean>('/user/update', body.value).then(r => {
+  axios_util.post<boolean>('/user/update', body.value).then(r => {
     if (r.data) {
       message.success('保存成功')
       data_all()
@@ -91,13 +92,40 @@ async function update() {
 }
 
 async function date_delete() {
-  await axios_util.get<boolean>('/user/delete/' + body.value.id).then(r => {
+  axios_util.get<boolean>('/user/delete/' + body.value.id).then(r => {
     if (r.data) {
       message.success('删除成功')
       data_all()
       showModal.value = false
     } else {
       message.warning('删除失败')
+    }
+  })
+}
+
+//查询所有角色
+const user_roles = ref<UserRoles>({})
+const roles_list = ref<Roles[]>([])
+
+async function roles_all() {
+  axios_util.get<Roles[]>('/roles/select/all').then(r => {
+    roles_list.value = r.data
+  })
+}
+
+//查询用户当前权限角色
+async function user_roles_now(user_id?: number) {
+  axios_util.get<UserRoles>('/user/roles/select/' + user_id).then(r => {
+    user_roles.value = r.data
+  })
+}
+//权限改变回调
+async function handle_update_user_roles(roles_id: number) {
+  user_roles.value.role_id = roles_id
+  axios_util.post('/user/roles/update', user_roles.value).then(r => {
+    if (r.data) {
+      message.success('改变角色成功')
+      user_roles_now(user_roles.value.user_id)
     }
   })
 }
@@ -127,9 +155,6 @@ async function date_delete() {
       :bordered="false"
       :segmented="segmented"
   >
-    <template #header-extra>
-      噢!
-    </template>
     <n-form>
       <n-form-item label="账号">
         <n-input v-model:value="body.username"/>
@@ -143,11 +168,23 @@ async function date_delete() {
         <n-input v-model:value="body.email"/>
       </n-form-item>
 
+      <n-form-item label="昵称">
+        <n-input v-model:value="body.nickname"/>
+      </n-form-item>
+
       <n-form-item label="头像">
         <n-input v-model:value="body.avatar"/>
       </n-form-item>
     </n-form>
-    {{ body }}
+
+    <n-radio-group @update:value="handle_update_user_roles" v-model:value="user_roles.role_id" name="radiogroup">
+      <n-space>
+        <n-radio v-for="song in roles_list" :key="song.id" :value="song.id">
+          {{ song.role_name }}
+        </n-radio>
+      </n-space>
+    </n-radio-group>
+
     <template #footer>
       <n-flex justify="space-between">
         <n-button @click="date_delete" type="error">删除</n-button>

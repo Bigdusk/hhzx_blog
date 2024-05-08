@@ -1,3 +1,10 @@
+export interface Timeline {
+    id?: number,
+    type?: string,
+    title?: string,
+    content?: string,
+    time?: string,
+}
 export interface Article {
     id?: number,
     user_id?: number,
@@ -49,8 +56,8 @@ export interface Permissions {
 
 export interface RolePermissions {
     id?: number,
-    role_id?: number,
-    permission_id?: number,
+    roles_id?: number,
+    permissions_id?: number,
 }
 
 export interface Roles {
