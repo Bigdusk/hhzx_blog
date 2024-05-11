@@ -22,6 +22,7 @@ function registration() {
     if (r.data) {
       message.success('注册成功')
       localStorage.setItem('authorization', r.data)
+      to_path('/admin')
     }
   })
 }

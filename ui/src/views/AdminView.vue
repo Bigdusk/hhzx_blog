@@ -148,7 +148,6 @@ function user_out() {
   width: 100%;
   height: 100vh;
   padding: 40px 60px 40px 142px;
-  z-index: 888;
 }
 .m-box {
   width: 100%;

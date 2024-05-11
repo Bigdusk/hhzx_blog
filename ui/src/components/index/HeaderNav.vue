@@ -9,15 +9,9 @@ import type {Category} from "@/entity";
 import axios_util from "@/utils/axios_util";
 
 onMounted(() => {
-  set_page_show()
   category_all()
   counter.article_all()
 })
-function set_page_show() {
-  let path = window.location.pathname
-  page_show.value = !path.includes('/admin');
-}
-const page_show = ref(true)
 
 const counter = useCounterStore()
 
@@ -52,7 +46,7 @@ async function category_all() {
 
   <div class="b-masks" :style="{width: counter.is_masks + '%'}"></div>
 
-  <div v-show="page_show" class="box">
+  <div class="box">
     <n-button class="menu-box" @click="activate('left')" text style="font-size: 34px">
       <n-icon>
         <MenuOutline/>
@@ -147,7 +141,7 @@ async function category_all() {
   display: block;
 }
 .box {
-  z-index: 999;
+  z-index: 888;
   background-color: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);

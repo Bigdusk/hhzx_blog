@@ -24,9 +24,7 @@ onMounted(() => {
     width: 100%;
     min-height: 100vh;
     ">
-      <HeaderNav/>
       <RouterView/>
-      <FooterInfo/>
     </n-layout>
   </n-config-provider>
 </template>

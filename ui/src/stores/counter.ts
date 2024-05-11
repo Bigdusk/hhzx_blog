@@ -84,6 +84,7 @@ export const useCounterStore = defineStore('counter', () => {
     function set_spin(b: boolean) {
         show_spin.value = b
     }
+
     return {
         theme,
         is_masks,

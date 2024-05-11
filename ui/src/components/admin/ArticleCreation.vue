@@ -182,7 +182,6 @@ const activate = (place: DrawerPlacement) => {
       @onUploadImg="onUploadImg"
   />
 
-  {{tags.toString()}}
   <n-drawer
       v-model:show="active"
       :width="200"

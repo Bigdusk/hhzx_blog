@@ -5,6 +5,7 @@ use api::utils::env_var;
 
 #[tokio::main]
 async fn main() {
+    //编译：cross build --release --target=x86_64-unknown-linux-musl
     //日志
     tracing_subscriber::fmt::init();
     //检查是否有配置文件

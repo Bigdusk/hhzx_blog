@@ -165,11 +165,3 @@ fn allow_path_all() -> Vec<&'static str> {
         "/file/download/"
     ]
 }
-
-//处理器参数获取
-/*async fn handler(
-    // extract the current user, set by the middleware
-    Extension(current_user): Extension<user::Model>,
-) {
-    // ...
-}*/

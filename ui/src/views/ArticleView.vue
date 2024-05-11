@@ -96,7 +96,7 @@ async function comment_select_all() {
     <div class="a-box">
       <div class="a-list-box">
         <n-card :bordered="false" embedded hoverable>
-          <h1>标题</h1>
+          <h1>{{ article.title }}</h1>
 
           <MdPreview :theme="counter.is_topic_show? 'light':'dark'" :editorId="id" :modelValue="article.markdown"/>
 
@@ -275,11 +275,13 @@ async function comment_select_all() {
   }
 
   .a-list-box {
+    width: 100%;
     margin: 0 auto;
   }
 
   .a-box {
     width: 100%;
+    padding: 5px;
   }
 }
 </style>

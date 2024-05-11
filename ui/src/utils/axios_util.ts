@@ -1,7 +1,7 @@
 import axios from "axios";
 import {message, to_path} from "@/utils/index";
 const axios_util = axios.create({
-    baseURL: "https://127.0.0.1:8888",
+    baseURL: "https://api.hhzx.top/",
     timeout: 60000
 });
 
@@ -15,7 +15,6 @@ interface ApiResponse<T> {
 axios_util.interceptors.request.use(
     config => {
         config.headers.Authorization = localStorage.getItem('authorization')
-        config.headers.fingerprint = localStorage.getItem('fingerprint')
         return config;
     },
     error => {
@@ -29,6 +28,7 @@ axios_util.interceptors.response.use(
         console.log(response)
         if (response.data.code === 10010) {
             message.warning(response.data.message)
+            localStorage.removeItem('authorization')
             to_path('/login')
         }
         if (response.data.code === 500) {
@@ -41,7 +41,8 @@ axios_util.interceptors.response.use(
         console.log(error)
         if (error.response.status === 401) {
             message.warning('请重新登录')
-            //to_path('/login')
+            localStorage.removeItem('authorization')
+            to_path('/login')
         }
         if (error.response.status === 422) {
             message.warning('请填写完整参数')
